@@ -1,0 +1,445 @@
+<!doctype html>
+<html>
+<head>
+    <title>Battles of Connecticut Farms and Springfield Mobile Map</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""/>
+    <link rel="stylesheet" href="Leaflet.PolylineMeasure.css">
+    <link rel="stylesheet" href="L.Control.Basemaps.css" />
+    <link rel="shortcut icon" href="#">
+    <style>
+    html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    #map {
+        width: 100%;
+        height: 100%;
+    }
+    .leaflet-control-layers .slider-wrapper {
+      margin-left: 20px; /* indent slider under checkbox */
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+    .leaflet-control-layers .slider-wrapper input[type=range] {
+      width: 180px;
+    }
+
+    /* Additional CSS for mobile display */
+    .leaflet-control-layers {
+        font-size: 18px;
+    }
+    
+    .leaflet-control-layers label {
+        padding: 6px 0;
+    }
+
+    .leaflet-image-layer {
+        cursor: pointer;
+    }
+
+    
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""></script>
+    <script src="Leaflet.PolylineMeasure.js"></script>
+    <script src="L.Control.Basemaps.js"></script>
+    <script>
+    var erskineBounds1 = [[40.640749,-74.351080], [40.751984,-74.221804]];
+    var erskineBounds2 = [[40.690499,-74.471729], [40.809893,-74.338760]];
+    var flemingBounds = [[40.695381,-74.357511], [40.739999,-74.276963]];
+    var briantPark = [40.71541960523158,-74.33632850646974];
+    var zoomLevel = 15;
+    // var map = L.map('map',{maxZoom:19,minZoom:5}).setView(briantPark, zoomLevel);
+    var map = L.map('map',{maxZoom:19,minZoom:5}).setView([39.5, -75], 6);
+
+    map.createPane('gpsPane');
+    map.getPane('gpsPane').style.zIndex = 1000;
+
+    map.createPane('connecticutPane');
+    map.getPane('connecticutPane').style.zIndex = 300;
+
+    map.createPane('springfieldPane');
+    map.getPane('springfieldPane').style.zIndex = 200;
+
+    map.createPane('flemingPane');
+    map.getPane('flemingPane').style.zIndex = 200;
+
+    // var maps = {
+    //     "Erskine (1779) Connecticut Farms": L.imageOverlay('Erskine_1779b_NYHS_Leaflet_Compressed.png', erskineBounds1,{opacity:1}),
+    //     "Erskine (1779) Springfield": L.imageOverlay('Erskine_1779a_NYHS_Leaflet_Compressed.png', erskineBounds2,{opacity:1})
+    // }
+    var maps = {
+        "Erskine (1779) Connecticut Farms": L.imageOverlay('Erskine_1779b_NYHS_Leaflet_Compressed.png', erskineBounds1,{opacity:1, pane:'connecticutPane', interactive: true}).addTo(map),
+        "Erskine (1779) Springfield": L.imageOverlay('Erskine_1779a_NYHS_Leaflet_Compressed.png', erskineBounds2,{opacity:1, pane:'springfieldPane', interactive: true}).addTo(map),
+        "Fleming (1973)": L.imageOverlay('Fleming_1973_Leaflet.png', flemingBounds,{opacity:1, pane:'flemingPane', interactive: true})
+    }
+
+    // Flash highlight function
+    function flashBounds(bounds) {
+
+    var highlight = L.rectangle(bounds, {
+        color: "#1f3a93",     // bright cyan (visible on old maps)
+        weight: 4,
+        opacity: 1,
+        fill: false,
+        pane: 'gpsPane'       // ensures it appears ABOVE maps
+    }).addTo(map);
+
+    setTimeout(function() {
+        map.removeLayer(highlight);
+    }, 750);  // duration of flash
+    }
+
+    Object.entries(maps).forEach(function([name, layer]) {
+
+    layer.on('click', function() {
+
+        // Reset both panes to base level
+        map.getPane('springfieldPane').style.zIndex = 200;
+        map.getPane('connecticutPane').style.zIndex = 200;
+        map.getPane('flemingPane').style.zIndex = 200;
+
+        // Bring clicked layer's pane to front
+        if (layer.options.pane) {
+            map.getPane(layer.options.pane).style.zIndex = 300;
+        }
+
+    });
+
+    layer.on('dblclick', function(e) {
+
+        // Bring this map to front (your pane logic)
+        if (layer.options.pane) {
+            map.getPane('springfieldPane').style.zIndex = 200;
+            map.getPane('connecticutPane').style.zIndex = 200;
+            map.getPane('flemingPane').style.zIndex = 200;
+
+            map.getPane(layer.options.pane).style.zIndex = 300;
+        }
+
+        flashBounds(layer.getBounds());
+
+        // Zoom to this map
+        map.flyToBounds(layer.getBounds(), {
+            maxZoom: zoomLevel,
+            padding: [20, 20],
+            duration: 1.2
+        });
+
+        
+        // layer.setOpacity(0.7);
+
+        // setTimeout(function() {
+        //     layer.setOpacity(1);
+        // }, 150);
+
+
+    });
+
+    
+    layer.on('contextmenu', function(e) {
+
+        // optional: bring to front (recommended)
+        map.getPane('springfieldPane').style.zIndex = 200;
+        map.getPane('connecticutPane').style.zIndex = 200;
+        map.getPane('flemingPane').style.zIndex = 200;
+
+        if (layer.options.pane) {
+            map.getPane(layer.options.pane).style.zIndex = 300;
+        }
+
+        // zoom
+        map.flyToBounds(layer.getBounds(), {
+            maxZoom: zoomLevel,
+            padding: [20, 20],
+            duration: 1.2
+        });
+
+    });
+
+
+    });
+    map.doubleClickZoom.disable();
+    
+    // map.fitBounds(maps["Erskine (1779)"].getBounds(),{
+    //     maxZoom: zoomLevel,
+    //     padding: [-40, -40]
+    // });
+
+    // Initial map bounds
+    // var combinedBounds = L.latLngBounds([]);
+    // Object.values(maps).forEach(function(layer) {
+    //     combinedBounds.extend(layer.getBounds());
+    // });
+
+    var boundsMaps = [
+    "Erskine (1779) Connecticut Farms",
+    "Erskine (1779) Springfield"
+    ];
+    var combinedBounds = L.latLngBounds([]);
+    boundsMaps.forEach(function(name) {
+        combinedBounds.extend(maps[name].getBounds());
+    });
+    
+    map.whenReady(function () {
+
+        setTimeout(function() {
+            map.flyToBounds(combinedBounds, {
+                maxZoom: zoomLevel,
+                padding: [-40, -40],
+                duration: 1.5
+            });
+        }, 1000);
+
+    });
+
+    
+    // map.on('overlayadd', function(e) {
+    //     if (e.layer === maps["Erskine (1779) Connecticut Farms"]) {
+    //         map.getPane('connecticutPane').style.zIndex = 300;
+    //         map.getPane('springfieldPane').style.zIndex = 200;
+    //     } else {
+    //         map.getPane('springfieldPane').style.zIndex = 300;
+    //         map.getPane('connecticutPane').style.zIndex = 200;
+    //     }
+    // });
+
+    
+    map.on('overlayadd', function(e) {
+        setTimeout(function() {
+            map.getPane('springfieldPane').style.zIndex = 200;
+            map.getPane('connecticutPane').style.zIndex = 200;
+            map.getPane('flemingPane').style.zIndex = 200;
+
+            if (e.layer.options.pane) {
+                map.getPane(e.layer.options.pane).style.zIndex = 300;
+            }
+        }, 0);
+    });
+
+    // Object.entries(maps).forEach(function([name, layer]) {
+
+    // layer.on('click', function() {
+
+    //     // Reset both panes to base level
+    //     map.getPane('springfieldPane').style.zIndex = 200;
+    //     map.getPane('connecticutPane').style.zIndex = 200;
+
+    //     // Bring clicked layer's pane to front
+    //     if (layer.options.pane) {
+    //         map.getPane(layer.options.pane).style.zIndex = 300;
+    //     }
+
+    // });
+    // });
+
+    // map.zoomIn(1);
+
+
+    // GPS code
+    var userMarker;
+    var accuracyCircle;
+
+    function onLocationFound(e) {
+    if (userMarker) {
+        map.removeLayer(userMarker);
+        map.removeLayer(accuracyCircle);
+    }
+
+    userMarker = L.circleMarker(e.latlng, {
+        pane: 'gpsPane',
+        radius: 8,
+        fillColor: "#007bff",
+        color: "#fff",
+        weight: 2,
+        opacity: 1,
+        fillOpacity: 1
+    }).addTo(map);
+
+    accuracyCircle = L.circle(e.latlng, {
+        pane: 'gpsPane',
+        radius: e.accuracy,
+        color: "#007bff",
+        fillOpacity: 0.1
+    }).addTo(map);
+    }
+
+    map.locate({
+    watch: true,
+    enableHighAccuracy: true
+    });
+
+    map.on('locationfound', onLocationFound);
+
+    map.on('locationerror', function(e) {
+    console.warn("Location error:", e.message);
+    });
+
+    //End GPS code
+
+    var basemaps = [
+            L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+                subdomains: 'abcd',
+                maxZoom: 19,
+                minZoom: 5,
+                label: 'OpenStreetMap'
+            }),
+            L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: '© Esri, Maxar, Earthstar Geographics',
+                subdomains: 'abcd',
+                maxZoom: 19,
+                minZoom: 5,
+                label: 'Esri imagery'
+            })
+        ];
+    map.addControl(L.control.basemaps({
+            basemaps: basemaps,
+            tileX: 0,
+            tileY: 0,
+            tileZ: 1,
+            position:'bottomleft'
+    }));
+    var blackIcon = L.icon({
+    iconUrl: 'marker-icon-2x-black.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+    });
+    var marker = L.marker(briantPark,{icon:blackIcon});
+    marker.bindPopup("<b>Briant Park</b><br>Proposed historic marker area");
+    var markerLayer = L.layerGroup([marker]);
+    //markerLayer.addTo(map);
+    var geoJSON = {"type":"FeatureCollection","features":[{"type":"Feature","id":1,"geometry":{"type":"Polygon","coordinates":[[[-74.328627399961078,40.718518668401856],[-74.328698131798561,40.718516129774592],[-74.328768195991998,40.71850832835279],[-74.328836917768882,40.718495339270113],[-74.32890363528611,40.718477287621468],[-74.328967706004491,40.718454347258032],[-74.329028512877329,40.718426739112893],[-74.329085470293208,40.718394729073097],[-74.329138029716063,40.718358625418823],[-74.329185684968223,40.718318775854257],[-74.329227977105091,40.718275564158724],[-74.329264498835002,40.718229406490565],[-74.329294898441503,40.718180747378923],[-74.329318883170345,40.718130055442536],[-74.329336222048312,40.718077818876466],[-74.32934674810727,40.718024540750449],[-74.329350359991437,40.717970734163842],[-74.329347022933078,40.717916917304173],[-74.329336769086552,40.717863608456653],[-74.32931969721804,40.717811321012839],[-74.329295971753794,40.717760558526479],[-74.329265821195975,40.717711809864156],[-74.329229535921641,40.717665544497279],[-74.329187465385829,40.717622207981115],[-74.329140014755723,40.717582217663988],[-74.329087641008627,40.717545958668289],[-74.329030848530778,40.717513780181662],[-74.328970184260072,40.717485992094502],[-74.32890623241876,40.717462862015708],[-74.32883960888752,40.717444612695679],[-74.32877095527455,40.717431419881301],[-74.328700932736936,40.717423410623596],[-74.328630215614012,40.717420662054181],[-74.328559484933692,40.717423200642621],[-74.328489421854442,40.71743100194147],[-74.328420701105955,40.717443990821749],[-74.328353984491812,40.717462042196331],[-74.328289914516475,40.717484982224576],[-74.328229108198116,40.717512589986299],[-74.32817215112685,40.717544599609141],[-74.328119591825455,40.717580702828982],[-74.328071936466941,40.717620551958348],[-74.32802964400004,40.717663763234562],[-74.327993121729094,40.717709920515468],[-74.327962721391287,40.717758579286802],[-74.327938735769024,40.717809270942894],[-74.327921395869822,40.717861507299418],[-74.327910868701125,40.717914785294731],[-74.327907255661259,40.717968591834492],[-74.327910591562443,40.718022408732956],[-74.327920844294781,40.718075717703456],[-74.327937915134896,40.718128005349683],[-74.327961639696099,40.718178768110086],[-74.327991789510861,40.718227517107607],[-74.328028074230687,40.718273782857899],[-74.328070144421929,40.718317119791017],[-74.328117594930546,40.718357110542563],[-74.328169968783968,40.718393369973519],[-74.328226761591864,40.718425548879416],[-74.328287426403648,40.718453337353829],[-74.328351378976237,40.718476467772916],[-74.32841800340087,40.718494717373275],[-74.328486658035089,40.718507910397157],[-74.328556681682485,40.718515919785588],[-74.328627399961078,40.718518668401856]]]},"properties":{"OBJECTID":1,"Name":"Bryant's Tavern","POINT_X":-74.328627255399994,"POINT_Y":40.717961419200002,"BUFF_DIST":200,"ORIG_FID":16,"Shape_Length":1256.6370614359173,"Shape_Area":125663.70614359173}}]}
+    var geoJSONlayer = L.geoJSON(geoJSON, {
+        onEachFeature: function (feature, layer) {
+            layer.bindPopup("<b>Bryant's Tavern</b><br>Approximate location based on Erskine (1779)");
+        },
+        style: function (feature) {
+            return {
+                color: "black",
+                weight: 4,
+                fillColor: false,
+                fillOpacity: 0
+            };
+        }
+    });
+    //geoJSONlayer.addTo(map);
+    // var imageBounds = [[40.640749,-74.351080], [40.751984,-74.221804]];
+    //var overlay = L.imageOverlay('Erskine_1779b_NYHS_Leaflet_Compressed.png', imageBounds,{opacity:1}).addTo(map);
+    
+    var overlays = {
+    //"Bryant's Tavern":geoJSONlayer,
+    //"Briant Park": markerLayer,
+    ...maps
+    };
+    
+    var baseMaps = {};
+    var layersControl = L.control.layers(baseMaps, overlays,{collapsed:true}).addTo(map);
+
+    // Slider for one map
+    // map.whenReady(function () {
+    // var overlaysList = layersControl.getContainer()
+    //   .querySelector('.leaflet-control-layers-overlays');
+    // var labels = overlaysList.querySelectorAll('label');
+    // labels.forEach(function(label) {
+    //   if (label.textContent.trim() === "Erskine (1779)") {
+    //     var sliderWrapper = L.DomUtil.create('div', 'slider-wrapper', label.parentNode);
+    //     sliderWrapper.innerHTML = `
+    //       <label style="margin-left: 3px;">Opacity</label>
+    //       <input type="range" min="0" max="1" step="0.05" value="${overlay.options.opacity}">
+    //     `;
+    //     L.DomEvent.disableClickPropagation(sliderWrapper);
+    //     var slider = sliderWrapper.querySelector('input');
+    //     slider.addEventListener("input", function() {
+    //       overlay.setOpacity(this.value);
+    //     });
+    //   }
+    // });
+    // });
+
+    // Slider for multiple maps
+    // map.whenReady(function () {
+
+    // var overlaysList = layersControl.getContainer()
+    //     .querySelector('.leaflet-control-layers-overlays');
+
+    // var labels = overlaysList.querySelectorAll('label');
+
+    // labels.forEach(function(label) {
+
+    //     var layerName = label.textContent.trim();
+    //     var layer = maps[layerName];
+
+    //     if (layer && layer instanceof L.ImageOverlay) {
+
+    //     var sliderWrapper = L.DomUtil.create('div', 'slider-wrapper', label.parentNode);
+
+    //     sliderWrapper.innerHTML = `
+    //         <input type="range" min="0" max="1" step="0.05" value="${layer.options.opacity}">
+    //     `;
+
+    //     L.DomEvent.disableClickPropagation(sliderWrapper);
+
+    //     var slider = sliderWrapper.querySelector('input');
+
+    //     slider.addEventListener("input", function() {
+    //         layer.setOpacity(this.value);
+    //     });
+    //     }
+    // });
+    // });
+
+    map.whenReady(function () {
+
+    var overlaysList = layersControl.getContainer()
+        .querySelector('.leaflet-control-layers-overlays');
+
+    var labels = overlaysList.querySelectorAll('label');
+
+    labels.forEach(function(label) {
+
+        // Get the layer name reliably
+        var layerName = label.textContent.trim();
+
+        var layer = maps[layerName];
+
+        if (layer && layer instanceof L.ImageOverlay) {
+
+            // Create wrapper INSIDE this label
+            var sliderWrapper = L.DomUtil.create('div', 'slider-wrapper');
+
+            sliderWrapper.innerHTML = `
+                <input type="range" min="0" max="1" step="0.05" value="${layer.options.opacity}">
+            `;
+
+            // Append directly to THIS label
+            label.appendChild(sliderWrapper);
+
+            L.DomEvent.disableClickPropagation(sliderWrapper);
+
+            var slider = sliderWrapper.querySelector('input');
+
+            slider.addEventListener("input", function() {
+                layer.setOpacity(this.value);
+            });
+        }
+    });
+
+});
+    // End of slider code
+
+    L.control.polylineMeasure({unit:'landmiles',showUnitControl:true,unitControlUnits:["kilometres", "landmiles"],measureControlLabel:'&#128207;',measureControlTitleOn: 'Turn on measure tool',measureControlTitleOff: 'Turn off measure tool'}).addTo(map);
+    </script>
+</body>
+</html>
