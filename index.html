@@ -80,7 +80,7 @@
     var maps = {
         "Erskine (1779) Connecticut Farms": L.imageOverlay('Erskine_1779b_NYHS_Leaflet_Compressed.png', erskineBounds1,{opacity:1, pane:'connecticutPane', interactive: true}).addTo(map),
         "Erskine (1779) Springfield": L.imageOverlay('Erskine_1779a_NYHS_Leaflet_Compressed.png', erskineBounds2,{opacity:1, pane:'springfieldPane', interactive: true}).addTo(map),
-        "Fleming (1973)": L.imageOverlay('Fleming_1973_Leaflet.png', flemingBounds,{opacity:1, pane:'flemingPane', interactive: true})
+        "Fleming (1973)": L.imageOverlay('Fleming_1973_Leaflet_Compressed.png', flemingBounds,{opacity:1, pane:'flemingPane', interactive: true})
     }
 
     // Flash highlight function
@@ -147,6 +147,8 @@
 
     
     layer.on('contextmenu', function(e) {
+
+        L.DomEvent.preventDefault(e);
 
         // optional: bring to front (recommended)
         map.getPane('springfieldPane').style.zIndex = 200;
