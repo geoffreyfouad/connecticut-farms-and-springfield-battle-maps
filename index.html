@@ -42,10 +42,376 @@
         cursor: pointer;
     }
 
+    #startOverlay {
+        position: absolute;
+        top: 20px;              /* distance from top */
+        left: 50%;
+        transform: translateX(-50%);
+        
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        
+        padding: 16px 28px;
+        border-radius: 8px;
+
+        font-size: 22px;
+        font-weight: bold;
+        
+        z-index: 2000;          /* above everything */
+        
+        cursor: pointer;
+        text-align: center;
+
+        transition: opacity 0.3s ease;
+    }
+
+    #introScreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    /* Original basic coloring */
+    /* background: rgba(0, 0, 0, 0.85);
+    color: white; */
+
+    /* light parchment and dark brown text */
+    background: #efe4c8;
+    color: #2b1b0f;
+
     
+    /* background: linear-gradient(
+        180deg,
+        #f3e9d2 0%,
+        #e8d9b5 100%
+    );
+    color: #2b1b0f; */
+
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 2000;
+    text-align: center;
+    padding: 20px;
+
+    box-shadow: inset 0 0 80px rgba(60, 40, 20, 0.3);
+    }
+
+    .intro-content {
+        max-width: 400px;
+    }
+
+    #introScreen h1 {
+        font-size: 24px;
+        margin-bottom: 10px;
+        font-family: Georgia, serif;
+        color: #3a2412;
+    }
+
+    .subtitle {
+        font-size: 16px;
+        margin-bottom: 15px;
+        /* color: #ddd; */
+        color: #2b1b0f;
+        /* color: #5a3a1f; */
+    }
+
+    .instructions {
+        font-size: 14px;
+        margin-bottom: 25px;
+        line-height: 1.5;
+        color: #4a2f19;
+        /* Added for alignment */
+        text-align: left;
+        padding-left: 10px;
+        margin: 0 auto 25px auto;
+        line-height: 1.6;
+        max-width: 320px;
+    }
+
+    .button-group button {
+        display: block;
+        width: 100%;
+        margin: 10px 0;
+        padding: 14px;
+
+        font-size: 16px;
+        font-weight: bold;
+
+        /* border: none; */
+        border-radius: 6px;
+        border: 1px solid #3a2412;
+
+        background: #8b0000;   /* historic red */
+        color: white;
+
+        cursor: pointer;
+
+    }
+
+    .button-group button:hover {
+        background: #a00000;
+    }
+
+    /* fade out animation */
+    #introScreen.hidden {
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        pointer-events: none;
+    }
+
+    #infoPanel {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
+    height: 25%;
+    background: #f3e9d2;
+
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+
+    box-shadow: 0 -4px 10px rgba(0,0,0,0.3);
+
+    /* Hidden */
+    transform: translateY(100%);
+    transition: transform 0.3s ease;
+
+    z-index: 1500;
+
+    display: flex;
+    flex-direction: column;
+    }
+
+    #infoPanel.active {
+        /* Visible */
+        transform: translateY(0);
+    }
+
+    /* Header */
+    .panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 10px;
+        /* padding: 8px 10px 5px 10px; */
+
+        border-bottom: 1px solid #ccc;
+
+    }
+
+    /* Close panel button */
+    #panelClose {
+        position: absolute;
+        left: 10px;
+        font-size: 28px;
+        cursor: pointer;
+    }
+
+    /* Title */
+    #panelTitle {
+        margin: 0;
+        font-size: 18px;
+        color: #3a2412;
+    }
+
+    /* Panel scrolling */
+    .panel-content {
+        padding: 15px;
+        /* padding: 10px 15px; */
+        overflow-y: auto;
+
+        font-size: 14px;
+        color: #2b1b0f;
+    }
+    
+    /* .panel-content p {
+        margin-top: 0;
+    } */
+
+    .panel-content p {
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+
+    
+    /* .popup-title {
+        font-size: 16px;
+        color: #3a2412;
+        margin-bottom: 4px;
+    } */
+     
+    .popup-title {
+        font-size: 16px;
+        font-weight: bold;
+        border-bottom: 1px solid #8b0000;
+        padding-bottom: 4px;
+        margin-bottom: 4px;
+    }
+
+    .popup-divider {
+        border: none;
+        border-top: 1px solid #8b0000; /* historic red line */
+        margin: 6px 0 8px 0;
+    }
+
+    .popup-body {
+        font-size: 14px;
+        color: #2b1b0f;
+    }
+
+    .popup-body p {
+        margin-top: 0;
+        margin-bottom: 8px;
+    }
+
+    
+    .leaflet-tooltip {
+        background: #f3e9d2;
+        color: #2b1b0f;
+
+        border: 1px solid #5a3a1f;
+        /* border: none; */
+        border-radius: 4px;
+
+        /* box-shadow: 0 1px 3px rgba(0,0,0,0.2); */
+
+        font-family: Georgia, serif;
+        font-size: 13px;
+
+        padding: 4px 8px;
+
+        position: relative;
+    }
+
+    /* .leaflet-tooltip-top:before {
+    border-top-color: #f3e9d2;
+    } */
+
+    /* .leaflet-tooltip-top:before {
+        border-top-color: transparent !important;
+    } */
+
+    .leaflet-tooltip-top:before {
+        content: "";
+        position: absolute;
+
+        left: 49%;
+        transform: translateX(-0%);
+        
+        bottom: -2px;
+
+        border-left: 6.9px solid transparent;
+        border-right: 6.9px solid transparent;
+        border-top: 6.9px solid #5a3a1f;
+    }
+
+    
+    .leaflet-tooltip-top:after {
+        content: "";
+        position: absolute;
+
+        left: 50%;
+        transform: translateX(-50%);
+
+        bottom: -6px;
+
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 6px solid #f3e9d2;
+    }
+
+    .church-tooltip.leaflet-tooltip-top:before {
+        content: "";
+        position: absolute;
+
+        left: 50%;
+        transform: translateX(-0%);
+        
+        bottom: -1.5px;
+
+        border-left: 6.9px solid transparent;
+        border-right: 6.9px solid transparent;
+        border-top: 6.9px solid #5a3a1f;
+    }
+
+    
+    .church-tooltip.leaflet-tooltip-top:after {
+        content: "";
+        position: absolute;
+
+        left: 50%;
+        transform: translateX(-50%);
+
+        bottom: -6px;
+
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+        border-top: 6px solid #f3e9d2;
+    }
+
+    
+    .leaflet-tooltip-bottom:before {
+        border-bottom-color: #f3e9d2;
+    }
+
+    .leaflet-tooltip-left:before {
+        border-left-color: #f3e9d2;
+    }
+
+    .leaflet-tooltip-right:before {
+        border-right-color: #f3e9d2;
+    }
+
+    /* .leaflet-popup-content {
+        font-family: Georgia, serif;
+    } */
+
+
     </style>
 </head>
 <body>
+    
+    <div id="introScreen">
+
+    <div class="intro-content">
+        <h1>Battles of Connecticut Farms & Springfield</h1>
+
+        <p class="subtitle">
+        Experience the Revolutionary War landscape through<br>historic maps.
+        </p>
+
+        <p class="instructions">
+        • Allow location tracking to walk "in the maps"<br>
+        • Tap maps to bring them forward and learn more<br>
+        • Double-tap or long-press to zoom to a map<br>
+        • Adjust opacity at upper right to compare maps
+        </p>
+
+        <div class="button-group">
+        <button id="startWithAudio">Begin with Sound</button>
+        <button id="startWithoutAudio">Begin without Sound</button>
+        </div>
+    </div>
+
+    </div>
+
+    <div id="infoPanel">
+
+    <div class="panel-header">
+        <span id="panelClose">✕</span>
+        <h2 id="panelTitle"></h2>
+    </div>
+
+    <div class="panel-content" id="panelContent"></div>
+
+    </div>
+    <!-- <div id="startOverlay">Tap to Begin</div> -->
     <div id="map"></div>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
@@ -58,11 +424,71 @@
     var flemingBounds = [[40.695381,-74.357511], [40.739999,-74.276963]];
     var briantPark = [40.71541960523158,-74.33632850646974];
     var zoomLevel = 15;
+
+    // Map info for panels
+    var mapInfo = {
+    "Erskine (1779) Connecticut Farms": `
+        <p>
+        This map was created under the supervision of Robert Erskine, Geographer and
+        Surveyor General of the Continental Army.
+        It depicts roads and key landmarks in and around Connecticut Farms in 1779.
+        </p>
+        <p>
+        Use this map in tandem with the Springfield map to explore the landscape of the battles
+        as depicted by the Continental Army.
+        </p>
+    `,
+    "Erskine (1779) Springfield": `
+        <p>
+        This map was created under the supervision of Robert Erskine, Geographer and
+        Surveyor General of the Continental Army.
+        It depicts key landmarks on the road from Springfield to Morristown in 1779.
+        </p>
+        <p>
+        Use this map in tandem with the Connecticut Farms map to explore the landscape of the battles
+        as depicted by the Continental Army.
+        </p>
+    `,
+    "Fleming (1973)": `
+        <p>
+        This map presents a historic reconsonstruction of battlefield positions from the 1973
+        book on <i>The Forgotten Victory: The Battle for New Jersey - 1780</i> by Thomas Fleming.
+        It depicts locations of key military regiments from historical documentation on the battles.
+        </p>
+        <p>
+        Use this map for a sense of where different military actions were taking place.
+        </p>
+    `
+};
+    
     // var map = L.map('map',{maxZoom:19,minZoom:5}).setView(briantPark, zoomLevel);
     var map = L.map('map',{maxZoom:19,minZoom:5}).setView([39.5, -75], 6);
 
+    var introAudio = new Audio('drum.mp3');
+    introAudio.volume = 0.5;  // optional (0–1)
+
+    // Pane function for drawing order
+    var zCounter = 300;
+    function bringLayerToTop(layer) {
+
+        zCounter += 1;
+
+        if (zCounter > 10000) {
+            zCounter = 300;
+        }
+
+        if (layer.options.pane) {
+            map.getPane(layer.options.pane).style.zIndex = zCounter;
+        }
+    }
+
     map.createPane('gpsPane');
-    map.getPane('gpsPane').style.zIndex = 1000;
+    map.getPane('gpsPane').style.zIndex = 10003;
+
+    map.getPane('popupPane').style.zIndex = 10002;
+
+    map.createPane('landmarkPane');
+    map.getPane('landmarkPane').style.zIndex = 10001;
 
     map.createPane('connecticutPane');
     map.getPane('connecticutPane').style.zIndex = 300;
@@ -99,32 +525,85 @@
     }, 750);  // duration of flash
     }
 
+    // Open/close map info panel
+    var infoPanel = document.getElementById('infoPanel');
+    var panelTitle = document.getElementById('panelTitle');
+    var panelContent = document.getElementById('panelContent');
+    var panelClose = document.getElementById('panelClose');
+
+    function openPanel(name) {
+        panelTitle.textContent = name;
+        panelContent.innerHTML = mapInfo[name] || "<p>No information available.</p>";
+        infoPanel.classList.add('active');
+    }
+
+    // function closePanel() {
+    //     infoPanel.classList.remove('active');
+    // }
+
+    function closePanel() {
+        if (infoPanel.classList.contains('active')) {
+            infoPanel.classList.remove('active');
+        }
+    }
+
+
+    panelClose.addEventListener('click', closePanel);
+
     Object.entries(maps).forEach(function([name, layer]) {
+
+    var clickTimeout;
+    var suppressClick = false;
 
     layer.on('click', function() {
 
-        // Reset both panes to base level
-        map.getPane('springfieldPane').style.zIndex = 200;
-        map.getPane('connecticutPane').style.zIndex = 200;
-        map.getPane('flemingPane').style.zIndex = 200;
+        suppressClick = false;
 
-        // Bring clicked layer's pane to front
-        if (layer.options.pane) {
-            map.getPane(layer.options.pane).style.zIndex = 300;
+        clickTimeout = setTimeout(function() {
+        
+        if (suppressClick) return;
+
+        bringLayerToTop(layer);
+
+        // openPanel(name);
+
+        
+        if (infoPanel.classList.contains('active') && panelTitle.textContent === name) {
+            closePanel();
+        } else {
+            openPanel(name);
         }
+
+        }, 300);  // delay to differentiate from double-click
+
+        // // Reset both panes to base level
+        // map.getPane('springfieldPane').style.zIndex = 200;
+        // map.getPane('connecticutPane').style.zIndex = 200;
+        // map.getPane('flemingPane').style.zIndex = 200;
+
+        // // Bring clicked layer's pane to front
+        // if (layer.options.pane) {
+        //     map.getPane(layer.options.pane).style.zIndex = 300;
+        // }
 
     });
 
     layer.on('dblclick', function(e) {
+        
+        suppressClick = true;
+        clearTimeout(clickTimeout);
+        closePanel();
 
-        // Bring this map to front (your pane logic)
-        if (layer.options.pane) {
-            map.getPane('springfieldPane').style.zIndex = 200;
-            map.getPane('connecticutPane').style.zIndex = 200;
-            map.getPane('flemingPane').style.zIndex = 200;
+        bringLayerToTop(layer);
 
-            map.getPane(layer.options.pane).style.zIndex = 300;
-        }
+        // // Bring this map to front (your pane logic)
+        // if (layer.options.pane) {
+        //     map.getPane('springfieldPane').style.zIndex = 200;
+        //     map.getPane('connecticutPane').style.zIndex = 200;
+        //     map.getPane('flemingPane').style.zIndex = 200;
+
+        //     map.getPane(layer.options.pane).style.zIndex = 300;
+        // }
 
         flashBounds(layer.getBounds());
 
@@ -150,14 +629,20 @@
 
         L.DomEvent.preventDefault(e);
 
-        // optional: bring to front (recommended)
-        map.getPane('springfieldPane').style.zIndex = 200;
-        map.getPane('connecticutPane').style.zIndex = 200;
-        map.getPane('flemingPane').style.zIndex = 200;
+        suppressClick = true;
+        clearTimeout(clickTimeout);
+        closePanel();
 
-        if (layer.options.pane) {
-            map.getPane(layer.options.pane).style.zIndex = 300;
-        }
+        bringLayerToTop(layer);
+
+        // // optional: bring to front (recommended)
+        // map.getPane('springfieldPane').style.zIndex = 200;
+        // map.getPane('connecticutPane').style.zIndex = 200;
+        // map.getPane('flemingPane').style.zIndex = 200;
+
+        // if (layer.options.pane) {
+        //     map.getPane(layer.options.pane).style.zIndex = 300;
+        // }
 
         // zoom
         map.flyToBounds(layer.getBounds(), {
@@ -191,18 +676,157 @@
     boundsMaps.forEach(function(name) {
         combinedBounds.extend(maps[name].getBounds());
     });
+
+    function fadeOutAudio(audio, duration = 1000) {
+
+        var stepTime = 30;  // how often to lower volume (ms)
+        // var steps = duration / stepTime;
+        // var volumeStep = audio.volume / steps;
+
+        var fadeInterval = setInterval(function() {
+
+            // if (audio.volume > volumeStep) {
+            //     audio.volume -= volumeStep;
+            // } else {
+            //     clearInterval(fadeInterval);
+            //     audio.pause();
+            //     audio.currentTime = 0;
+
+            //     // restore volume for next playback
+            //     audio.volume = 0.5;
+            // }
+            
+            audio.volume -= audio.volume * 0.1;
+
+            if (audio.volume <= 0.05) {
+                clearInterval(fadeInterval);
+                audio.pause();
+                audio.currentTime = 0;
+                audio.volume = 0.6;
+            }
+
+
+        }, stepTime);
+    }
+
+    
+
+    // Button start
+    // var startOverlay = document.getElementById('startOverlay');
+
+    // startOverlay.addEventListener('click', function() {
+
+    //     // Play audio
+    //     introAudio.play();
+
+    //     // // Stop after 3 seconds
+    //     // setTimeout(function() {
+    //     //     introAudio.pause();
+    //     //     introAudio.currentTime = 0;
+    //     // }, 3000);
+
+        
+    //     setTimeout(function() {
+    //         fadeOutAudio(introAudio, 1500);
+    //     }, 1500);
+
+
+    //     // Start your fly-in
+    //     map.flyToBounds(combinedBounds, {
+    //         maxZoom: zoomLevel,
+    //         padding: [-40, -40],
+    //         duration: 1.5
+    //     });
+
+    //     // Hide the overlay
+    //     // startOverlay.style.display = 'none';
+
+    //     startOverlay.style.opacity = 0;
+
+    //     setTimeout(function() {
+    //         startOverlay.style.display = 'none';
+    //     }, 300);
+
+
+    // });
+
+    // Intro screen start
+    var introScreen = document.getElementById('introScreen');
+    var startWithAudioBtn = document.getElementById('startWithAudio');
+    var startWithoutAudioBtn = document.getElementById('startWithoutAudio');
+
+    function startMap(playAudio) {
+
+        if (playAudio) {
+            introAudio.play();
+
+            // fade out audio over 3 seconds
+            setTimeout(function() {
+                fadeOutAudio(introAudio, 2200);
+            }, 800);
+        }
+
+        // start map animation
+        map.flyToBounds(combinedBounds, {
+            maxZoom: zoomLevel,
+            padding: [-40, -40],
+            duration: 1.5
+        });
+
+        // fade out intro screen
+        introScreen.classList.add('hidden');
+
+        setTimeout(function() {
+            introScreen.style.display = 'none';
+        }, 500);
+    }
+
+    // button events
+    startWithAudioBtn.addEventListener('click', function() {
+        startMap(true);
+    });
+
+    startWithoutAudioBtn.addEventListener('click', function() {
+        startMap(false);
+    });
     
     map.whenReady(function () {
 
-        setTimeout(function() {
-            map.flyToBounds(combinedBounds, {
-                maxZoom: zoomLevel,
-                padding: [-40, -40],
-                duration: 1.5
-            });
-        }, 1000);
+        // setTimeout(function() {
+
+            
+        // // // Start audio
+        // // introAudio.play().catch(function(err) {
+        // //     console.log("Audio play blocked:", err);
+        // // });
+
+        // // // Stop audio after 3 seconds
+        // // setTimeout(function() {
+        // //     introAudio.pause();
+        // //     introAudio.currentTime = 0;
+        // // }, 3000);
+
+
+        //     map.flyToBounds(combinedBounds, {
+        //         maxZoom: zoomLevel,
+        //         padding: [-40, -40],
+        //         duration: 1.5
+        //     });
+        // }, 1000);
 
     });
+
+    
+    // map.once('click', function() {
+
+    //     introAudio.play();
+
+    //     setTimeout(function() {
+    //         introAudio.pause();
+    //         introAudio.currentTime = 0;
+    //     }, 3000);
+
+    // });
 
     
     // map.on('overlayadd', function(e) {
@@ -217,15 +841,16 @@
 
     
     map.on('overlayadd', function(e) {
-        setTimeout(function() {
-            map.getPane('springfieldPane').style.zIndex = 200;
-            map.getPane('connecticutPane').style.zIndex = 200;
-            map.getPane('flemingPane').style.zIndex = 200;
+        bringLayerToTop(e.layer);
+        // setTimeout(function() {
+        //     map.getPane('springfieldPane').style.zIndex = 200;
+        //     map.getPane('connecticutPane').style.zIndex = 200;
+        //     map.getPane('flemingPane').style.zIndex = 200;
 
-            if (e.layer.options.pane) {
-                map.getPane(e.layer.options.pane).style.zIndex = 300;
-            }
-        }, 0);
+        //     if (e.layer.options.pane) {
+        //         map.getPane(e.layer.options.pane).style.zIndex = 300;
+        //     }
+        // }, 0);
     });
 
     // Object.entries(maps).forEach(function([name, layer]) {
@@ -322,6 +947,223 @@
     marker.bindPopup("<b>Briant Park</b><br>Proposed historic marker area");
     var markerLayer = L.layerGroup([marker]);
     //markerLayer.addTo(map);
+    
+    // var cannonballIcon = L.icon({
+    //     iconUrl: 'marker-icon-2x-black.png',
+    //     iconSize: [25, 41],     // adjust depending on your image
+    //     iconAnchor: [16, 16],   // center of the icon
+    //     popupAnchor: [0, -10]   // where popup appears
+    // });
+    // var cannonballHouse = L.marker([40.650289099641654, -74.39874153672635], {
+    //     icon: cannonballIcon
+    // });
+
+    // cannonballHouse.addTo(map);
+
+    
+    // var landmarkLayer = L.layerGroup([
+    //     cannonballHouse
+    // ]);
+
+    // landmarkLayer.addTo(map);
+
+    // Icons
+    var iconSet = {
+        cannonball: L.icon({
+            iconUrl: 'cannonball.png',
+            iconSize: [32, 32],
+            iconAnchor: [16, 16],
+            popupAnchor: [0, -12]
+        }),
+        flag: L.icon({
+            iconUrl: 'flag.png',
+            iconSize: [32, 32],
+            iconAnchor: [16, 16],
+            popupAnchor: [0, -10]
+        }),       
+        church: L.divIcon({
+            html: `
+            <svg width="28" height="36" viewBox="0 0 24 24">
+                <!-- WHITE OUTLINE (slightly thicker) -->
+                <line x1="12" y1="3" x2="12" y2="21" stroke="#ffffff" stroke-width="4"/>
+                <line x1="8" y1="8" x2="16" y2="8" stroke="#ffffff" stroke-width="4"/>
+                <!-- MAIN CROSS (on top) -->
+                <line x1="12" y1="4" x2="12" y2="20" stroke="#5a3a1f" stroke-width="2"/>
+                <line x1="8" y1="8" x2="16" y2="8" stroke="#5a3a1f" stroke-width="2"/>
+                </svg>
+            `,
+            className: '',
+            iconSize: [30, 30],
+            iconAnchor: [15, 15],
+            popupAnchor: [0, -8]
+        }),
+        house: L.divIcon({
+            html: `
+            <svg width="32" height="32" viewBox="0 0 24 24">
+                <!-- WHITE OUTLINE -->
+                <path d="M4 11 L12 4 L20 11 V20 H4 Z"
+                fill="none"
+                stroke="#ffffff"
+                stroke-width="4"/>
+                <!-- MAIN HOUSE -->
+                <path d="M4 11 L12 4 L20 11 V20 H4 Z"
+                fill="#f3e9d2"
+                stroke="#5a3a1f"
+                stroke-width="2"/>
+                <!-- DOOR -->
+                <rect x="10" y="14" width="4" height="6"
+                fill="#5a3a1f"/>
+                </svg>
+            `,
+            className: '',
+            iconSize: [30, 30],
+            iconAnchor: [15, 15],
+            popupAnchor: [1.5, -12]
+        })
+    };
+    
+    // Landmarks
+    var landmarks = {
+        "Cannonball House": {
+            coords: [40.650289099641654, -74.39874153672635],
+            icon: "cannonball",
+            description: `
+                <p>Home to the Springfield Historical Society, the Cannonball House, 
+                    named for the cannonball that struck it, is one of only four homes 
+                    left standing after the battles.</p>
+                `
+        },
+        "First Presbyterian Church of Springfield": {
+            coords: [40.71238436082439, -74.31053192757491],
+            icon: "church",
+            tooltip: {
+                className: "church-tooltip",
+                offset: [-0.5, -9]
+            },
+            description: `
+                <p>Lore has it that on learning ammunition supplies were running low
+                    Chaplain of the Continental Army, James Caldwell, 
+                    tore pages from the Isaac Watts psalters to use as musket wadding and 
+                    uttered the famous saying "Give 'em Watts boys."</p>
+                `
+        },
+        "First Presbyterian Church of Connecticut Farms": {
+            coords: [40.692778967598834, -74.27346297642734],
+            icon: "church",
+            tooltip: {
+                className: "church-tooltip",
+                offset: [-0.5, -9]
+            },
+            description: `
+                <p>Many from the battles are laid to rest in the cemetery of this church.</p>
+                `
+        },
+        "Caldwell Parsonage": {
+            coords: [40.695263999665116, -74.27853410311435],
+            icon: "house",
+            tooltip: {
+                className: "church-tooltip",
+                offset: [1, -9]
+            },
+            description: `
+                <p>Site of the famous slaying of Hannah Caldwell
+                    thought to have inspired many to join the fight,
+                    now a historic site and museum.</p>
+                `
+        }
+    };
+
+    var landmarkLayer = L.layerGroup();
+
+    Object.entries(landmarks).forEach(function([name, data]) {
+
+        var marker = L.marker(data.coords, {
+            icon: iconSet[data.icon],
+            pane: 'landmarkPane'
+        });
+
+        // Simple popup
+        // marker.bindPopup(data.description);
+        // marker.bindPopup(`
+        //     <div class="popup-content">
+        //     <div class="popup-title"><b>${name}</b></div>
+        //     <hr class="popup-divider">
+        //     <div class="popup-body">
+        //         ${data.description}
+        //     </div>
+        // </div>
+        // `);
+    
+        marker.bindPopup(`
+            <div class="popup-content">
+                <div class="popup-title">${name}</div>
+                <div class="popup-body">${data.description}</div>
+            </div>
+        `);
+
+        
+        let tooltipOptions = {
+            direction: 'top',
+            offset: data.tooltip?.offset || [0, -10],
+            className: data.tooltip?.className || '',
+            opacity: 0.95,
+            permanent: false
+        };
+
+        let popupOpen = false;
+
+        marker.bindTooltip(name, tooltipOptions);
+
+        
+        marker.on('popupopen', function () {
+            popupOpen = true;
+            marker.closeTooltip();
+        });
+
+        
+        marker.on('popupclose', function () {
+            popupOpen = false;
+        });
+
+        
+        marker.on('mouseover', function () {
+            if (popupOpen) marker.closeTooltip();
+        });
+
+
+
+
+        // Show marker name on hover
+        // marker.bindTooltip(name,{
+        //     direction: 'top',
+        //     offset: [0, -10],
+        //     opacity: 0.95,
+        //     permanent: false
+        // });
+
+        
+    // marker.bindTooltip(name, {
+    //     direction: 'top',
+    //     offset: data.tooltip?.offset || [0, -10],
+    //     className: data.tooltip?.className || '',
+    //     opacity: 0.95,
+    //     permanent: false
+    // });
+
+    // Hide tooltip when popup opens
+    marker.on('popupopen', function () {
+        marker.closeTooltip();
+    });
+
+    
+
+        // Add to layer
+        landmarkLayer.addLayer(marker);
+
+    });
+
+    landmarkLayer.addTo(map);
+
     var geoJSON = {"type":"FeatureCollection","features":[{"type":"Feature","id":1,"geometry":{"type":"Polygon","coordinates":[[[-74.328627399961078,40.718518668401856],[-74.328698131798561,40.718516129774592],[-74.328768195991998,40.71850832835279],[-74.328836917768882,40.718495339270113],[-74.32890363528611,40.718477287621468],[-74.328967706004491,40.718454347258032],[-74.329028512877329,40.718426739112893],[-74.329085470293208,40.718394729073097],[-74.329138029716063,40.718358625418823],[-74.329185684968223,40.718318775854257],[-74.329227977105091,40.718275564158724],[-74.329264498835002,40.718229406490565],[-74.329294898441503,40.718180747378923],[-74.329318883170345,40.718130055442536],[-74.329336222048312,40.718077818876466],[-74.32934674810727,40.718024540750449],[-74.329350359991437,40.717970734163842],[-74.329347022933078,40.717916917304173],[-74.329336769086552,40.717863608456653],[-74.32931969721804,40.717811321012839],[-74.329295971753794,40.717760558526479],[-74.329265821195975,40.717711809864156],[-74.329229535921641,40.717665544497279],[-74.329187465385829,40.717622207981115],[-74.329140014755723,40.717582217663988],[-74.329087641008627,40.717545958668289],[-74.329030848530778,40.717513780181662],[-74.328970184260072,40.717485992094502],[-74.32890623241876,40.717462862015708],[-74.32883960888752,40.717444612695679],[-74.32877095527455,40.717431419881301],[-74.328700932736936,40.717423410623596],[-74.328630215614012,40.717420662054181],[-74.328559484933692,40.717423200642621],[-74.328489421854442,40.71743100194147],[-74.328420701105955,40.717443990821749],[-74.328353984491812,40.717462042196331],[-74.328289914516475,40.717484982224576],[-74.328229108198116,40.717512589986299],[-74.32817215112685,40.717544599609141],[-74.328119591825455,40.717580702828982],[-74.328071936466941,40.717620551958348],[-74.32802964400004,40.717663763234562],[-74.327993121729094,40.717709920515468],[-74.327962721391287,40.717758579286802],[-74.327938735769024,40.717809270942894],[-74.327921395869822,40.717861507299418],[-74.327910868701125,40.717914785294731],[-74.327907255661259,40.717968591834492],[-74.327910591562443,40.718022408732956],[-74.327920844294781,40.718075717703456],[-74.327937915134896,40.718128005349683],[-74.327961639696099,40.718178768110086],[-74.327991789510861,40.718227517107607],[-74.328028074230687,40.718273782857899],[-74.328070144421929,40.718317119791017],[-74.328117594930546,40.718357110542563],[-74.328169968783968,40.718393369973519],[-74.328226761591864,40.718425548879416],[-74.328287426403648,40.718453337353829],[-74.328351378976237,40.718476467772916],[-74.32841800340087,40.718494717373275],[-74.328486658035089,40.718507910397157],[-74.328556681682485,40.718515919785588],[-74.328627399961078,40.718518668401856]]]},"properties":{"OBJECTID":1,"Name":"Bryant's Tavern","POINT_X":-74.328627255399994,"POINT_Y":40.717961419200002,"BUFF_DIST":200,"ORIG_FID":16,"Shape_Length":1256.6370614359173,"Shape_Area":125663.70614359173}}]}
     var geoJSONlayer = L.geoJSON(geoJSON, {
         onEachFeature: function (feature, layer) {
@@ -343,7 +1185,8 @@
     var overlays = {
     //"Bryant's Tavern":geoJSONlayer,
     //"Briant Park": markerLayer,
-    ...maps
+    ...maps,
+    "Landmarks": landmarkLayer
     };
     
     var baseMaps = {};
