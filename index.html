@@ -422,6 +422,7 @@
     var erskineBounds1 = [[40.640749,-74.351080], [40.751984,-74.221804]];
     var erskineBounds2 = [[40.690499,-74.471729], [40.809893,-74.338760]];
     var flemingBounds = [[40.695381,-74.357511], [40.739999,-74.276963]];
+    var clintonBounds = [[40.611661,-74.485151], [40.819536,-74.045152]];
     var briantPark = [40.71541960523158,-74.33632850646974];
     var zoomLevel = 15;
 
@@ -458,11 +459,23 @@
         <p>
         Use this map for a sense of where different military actions were taking place.
         </p>
+    `,
+    "Clinton (1775-1783)": `
+        <p>
+        This map was created for the British military commander, Sir Henry Clinton, at about the
+        time of the battles. It is a smaller scale map compared to the Erskine Continental Army
+        maps, illustrating the lack of local knowledge and landmarks held by the British army
+        during its ill-fated advance toward Morristown and George Washinton's headquarters.
+        </p>
+        <p>
+        Compare this map to the Erskine maps to see the difference in local knowledge of the two warring armies.
+        </p>
     `
 };
     
     // var map = L.map('map',{maxZoom:19,minZoom:5}).setView(briantPark, zoomLevel);
     var map = L.map('map',{maxZoom:19,minZoom:5}).setView([39.5, -75], 6);
+
 
     var introAudio = new Audio('drum.mp3');
     introAudio.volume = 0.5;  // optional (0–1)
@@ -499,6 +512,9 @@
     map.createPane('flemingPane');
     map.getPane('flemingPane').style.zIndex = 200;
 
+    map.createPane('clintonPane');
+    map.getPane('clintonPane').style.zIndex = 200;
+
     // var maps = {
     //     "Erskine (1779) Connecticut Farms": L.imageOverlay('Erskine_1779b_NYHS_Leaflet_Compressed.png', erskineBounds1,{opacity:1}),
     //     "Erskine (1779) Springfield": L.imageOverlay('Erskine_1779a_NYHS_Leaflet_Compressed.png', erskineBounds2,{opacity:1})
@@ -506,7 +522,8 @@
     var maps = {
         "Erskine (1779) Connecticut Farms": L.imageOverlay('Erskine_1779b_NYHS_Leaflet_Compressed.png', erskineBounds1,{opacity:1, pane:'connecticutPane', interactive: true}).addTo(map),
         "Erskine (1779) Springfield": L.imageOverlay('Erskine_1779a_NYHS_Leaflet_Compressed.png', erskineBounds2,{opacity:1, pane:'springfieldPane', interactive: true}).addTo(map),
-        "Fleming (1973)": L.imageOverlay('Fleming_1973_Leaflet_Compressed.png', flemingBounds,{opacity:1, pane:'flemingPane', interactive: true})
+        "Fleming (1973)": L.imageOverlay('Fleming_1973_Leaflet_Compressed.png', flemingBounds,{opacity:1, pane:'flemingPane', interactive: true}),
+        "Clinton (1775-1783)": L.imageOverlay('Clinton_1775_1783_Leaflet.png', clintonBounds,{opacity:1, pane:'clintonPane', interactive: true})
     }
 
     // Flash highlight function
@@ -912,7 +929,7 @@
     });
 
     //End GPS code
-
+    map.attributionControl.setPrefix('Leaflet');
     var basemaps = [
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
