@@ -1090,6 +1090,8 @@
         }
     };
 
+    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
     var landmarkLayer = L.layerGroup();
 
     Object.entries(landmarks).forEach(function([name, data]) {
@@ -1129,6 +1131,8 @@
 
         let popupOpen = false;
 
+        if (!isTouchDevice) {
+
         marker.bindTooltip(name, tooltipOptions);
 
         
@@ -1147,8 +1151,7 @@
             if (popupOpen) marker.closeTooltip();
         });
 
-
-
+        }
 
         // Show marker name on hover
         // marker.bindTooltip(name,{
