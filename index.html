@@ -372,6 +372,44 @@
         font-family: Georgia, serif;
     } */
 
+    /* Pop-up for desktop */
+    .leaflet-popup-content {
+        font-size: 14px;
+        padding: 8px;
+    }
+
+    /* Pop-up for mobile */
+    .popup-mobile .leaflet-popup-content {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+    /* Mobile pop-up narrower */
+    .popup-mobile .leaflet-popup-content-wrapper {
+        max-width: 220px;
+    }
+
+    /* Mobile pop-up title */
+    .popup-mobile .popup-title {
+        font-size: 14px;
+        margin-bottom: 4px;
+    }
+
+    /* Mobile pop-up smaller margin */
+    .popup-mobile .popup-body p {
+        margin-top: 0;
+        margin-bottom: 6px;
+    }
+    .popup-mobile .leaflet-popup-content-wrapper {
+        padding: 4px;
+    }
+
+    /* Mobile smaller close button */
+    .popup-mobile .leaflet-popup-close-button {
+        font-size: 16px;
+        top: 4px;
+        right: 6px;
+    }
 
     </style>
 </head>
@@ -383,7 +421,7 @@
         <h1>Battles of Connecticut Farms & Springfield</h1>
 
         <p class="subtitle">
-        Experience the Revolutionary War landscape through<br>historic maps.
+        Experience the Revolutionary War landscape through historic maps.
         </p>
 
         <p class="instructions">
@@ -988,7 +1026,7 @@
     var iconSet = {
         cannonball: L.icon({
             iconUrl: 'cannonball.png',
-            iconSize: [32, 32],
+            iconSize: [28, 28],
             iconAnchor: [16, 16],
             popupAnchor: [0, -12]
         }),
@@ -1042,7 +1080,7 @@
     // Landmarks
     var landmarks = {
         "Cannonball House": {
-            coords: [40.650289099641654, -74.39874153672635],
+            coords: [40.71017669069663, -74.30667731108102],
             icon: "cannonball",
             description: `
                 <p>Home to the Springfield Historical Society, the Cannonball House, 
@@ -1113,12 +1151,25 @@
         // </div>
         // `);
     
+        // marker.bindPopup(`
+        //     <div class="popup-content">
+        //         <div class="popup-title">${name}</div>
+        //         <div class="popup-body">${data.description}</div>
+        //     </div>
+        // `);
+
+        
         marker.bindPopup(`
             <div class="popup-content">
                 <div class="popup-title">${name}</div>
                 <div class="popup-body">${data.description}</div>
             </div>
-        `);
+        `, {
+            className: isTouchDevice ? 'popup-mobile' : '',
+            maxWidth: isTouchDevice ? 220 : 300
+        });
+
+        
 
         
         let tooltipOptions = {
