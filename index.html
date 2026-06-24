@@ -1182,7 +1182,7 @@
         
         let tooltipOptions = {
             direction: 'top',
-            offset: data.tooltip?.offset || [0, -10],
+            offset: data.tooltip?.offset || [-2, -10],
             className: data.tooltip?.className || '',
             opacity: 0.95,
             permanent: false
@@ -1192,7 +1192,7 @@
 
         if (!isTouchDevice) {
 
-        marker.bindTooltip(name, tooltipOptions);
+        // marker.bindTooltip(name, tooltipOptions);
 
         
         marker.on('popupopen', function () {
