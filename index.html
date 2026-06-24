@@ -1134,10 +1134,18 @@
 
     Object.entries(landmarks).forEach(function([name, data]) {
 
+        let baseZ = 0;
+
+        if (data.icon === "cannonball") baseZ = 0;
+        if (data.icon === "house") baseZ = 100;
+        if (data.icon === "church") baseZ = 200;
+
         var marker = L.marker(data.coords, {
             icon: iconSet[data.icon],
             pane: 'landmarkPane'
         });
+
+        marker.setZIndexOffset(baseZ);
 
         // Simple popup
         // marker.bindPopup(data.description);
@@ -1225,11 +1233,17 @@
     marker.on('popupopen', function () {
         marker.closeTooltip();
     });
-
     
+    marker.on('click', function() {
+        marker.setZIndexOffset(300);
+    });
 
-        // Add to layer
-        landmarkLayer.addLayer(marker);
+    marker.on('popupclose', function() {
+        marker.setZIndexOffset(baseZ);
+    })
+
+    // Add to layer
+    landmarkLayer.addLayer(marker);
 
     });
 
