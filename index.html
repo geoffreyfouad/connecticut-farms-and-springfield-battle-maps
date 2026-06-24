@@ -382,6 +382,9 @@
     .popup-mobile .leaflet-popup-content {
         font-size: 12px;
         padding: 6px;
+        padding-left: 6px;
+        padding-right: 6px;
+        margin: 6px 6px 8px 6px;
     }
 
     /* Mobile pop-up narrower */
@@ -396,6 +399,10 @@
     }
 
     /* Mobile pop-up smaller margin */
+    .popup-mobile .popup-body {
+        padding-left: 0;
+        margin-left: 0;
+    }
     .popup-mobile .popup-body p {
         margin-top: 0;
         margin-bottom: 6px;
@@ -1028,7 +1035,7 @@
             iconUrl: 'cannonball.png',
             iconSize: [28, 28],
             iconAnchor: [16, 16],
-            popupAnchor: [0, -12]
+            popupAnchor: [-2, -12]
         }),
         flag: L.icon({
             iconUrl: 'flag.png',
